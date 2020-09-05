@@ -3,7 +3,7 @@ import SingnIn from './pages/SingnIn';
 import SingnUp from './pages/SingnUp';
 
 const App: React.FC = () => {
-  return <SingnIn />;
+  return <SingnUp />;
 };
 
 export default App;
