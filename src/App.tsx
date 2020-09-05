@@ -1,8 +1,9 @@
 import React from 'react';
-import Singin from './pages/Singin';
+import SingnIn from './pages/SingnIn';
+import SingnUp from './pages/SingnUp';
 
 const App: React.FC = () => {
-  return <Singin />;
+  return <SingnIn />;
 };
 
 export default App;
