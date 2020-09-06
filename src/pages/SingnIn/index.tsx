@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useContext } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
@@ -8,12 +8,12 @@ import logoImg from '../../assets/Logo.svg';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import getValidationErros from '../../utils/getValidationErros';
-import { AuthContext } from '../../context/modules/AuthContext';
+import { useAuth } from '../../hooks/modules/AuthContext';
 
 const SingnIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
-  const { signIn } = useContext(AuthContext);
+  const { signIn } = useAuth();
 
   const hanleSingnIn = useCallback(
     async (data: { email: string; password: string }) => {
@@ -36,8 +36,6 @@ const SingnIn: React.FC = () => {
         const errors = getValidationErros(error);
 
         formRef.current?.setErrors(errors);
-
-        console.log(error);
       }
     },
     [signIn],
