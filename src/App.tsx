@@ -2,14 +2,15 @@ import React from 'react';
 import SingnIn from './pages/SingnIn';
 import SingnUp from './pages/SingnUp';
 import GlobalStyle from './styles/global';
-import { AuthProvider } from './hooks/modules/AuthContext';
+import AppProvider from './hooks';
 
 const App: React.FC = () => {
   return (
     <>
-      <AuthProvider>
+      <AppProvider>
         <SingnIn />
-      </AuthProvider>
+      </AppProvider>
+
       <GlobalStyle />
     </>
   );

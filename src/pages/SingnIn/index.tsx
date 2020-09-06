@@ -9,11 +9,13 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import getValidationErros from '../../utils/getValidationErros';
 import { useAuth } from '../../hooks/modules/AuthContext';
+import { useToast } from '../../hooks/modules/ToastContext';
 
 const SingnIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
   const { signIn } = useAuth();
+  const { addToast } = useToast();
 
   const hanleSingnIn = useCallback(
     async (data: { email: string; password: string }) => {
@@ -32,13 +34,25 @@ const SingnIn: React.FC = () => {
 
         const { email, password } = data;
         signIn({ email, password });
+        addToast({
+          type: 'success',
+          title: 'logado com sucesso',
+        });
       } catch (error) {
-        const errors = getValidationErros(error);
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErros(error);
 
-        formRef.current?.setErrors(errors);
+          formRef.current?.setErrors(errors);
+        }
+
+        addToast({
+          type: 'error',
+          title: 'Erro no login',
+          description: 'Verifique suas credenciais',
+        });
       }
     },
-    [signIn],
+    [signIn, addToast],
   );
   return (
     <Container>
