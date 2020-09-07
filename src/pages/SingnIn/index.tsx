@@ -3,7 +3,7 @@ import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Container, Content, Background, AnimationContainer } from './styles';
 import logoImg from '../../assets/Logo.svg';
 import Input from '../../components/Input';
@@ -14,6 +14,7 @@ import { useToast } from '../../hooks/modules/ToastContext';
 
 const SingnIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+  const history = useHistory();
 
   const { signIn } = useAuth();
   const { addToast } = useToast();
@@ -34,11 +35,15 @@ const SingnIn: React.FC = () => {
         });
 
         const { email, password } = data;
-        signIn({ email, password });
+
+        await signIn({ email, password });
+
         addToast({
           type: 'success',
           title: 'logado com sucesso',
         });
+
+        history.push('/dashboard');
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErros(error);
