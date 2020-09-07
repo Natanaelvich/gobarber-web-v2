@@ -4,7 +4,8 @@ import * as Yup from 'yup';
 import { FiMail, FiUser, FiArrowLeft, FiLock } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
-import { Container, Content, Background } from './styles';
+import { Link } from 'react-router-dom';
+import { Container, Content, Background, AnimationContainer } from './styles';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -44,26 +45,28 @@ const SingnUp: React.FC = () => {
     <Container>
       <Background />
       <Content>
-        <img src={logoImg} alt="Gobarber" />
+        <AnimationContainer>
+          <img src={logoImg} alt="Gobarber" />
 
-        <Form ref={formRef} onSubmit={hanleSingnUp}>
-          <h1>Faça seu cadatro</h1>
+          <Form ref={formRef} onSubmit={hanleSingnUp}>
+            <h1>Faça seu cadatro</h1>
 
-          <Input placeholder="Nome" name="name" icon={FiUser} />
-          <Input placeholder="E-mail" name="email" icon={FiMail} />
-          <Input
-            placeholder="Senha"
-            type="password"
-            name="password"
-            icon={FiLock}
-          />
+            <Input placeholder="Nome" name="name" icon={FiUser} />
+            <Input placeholder="E-mail" name="email" icon={FiMail} />
+            <Input
+              placeholder="Senha"
+              type="password"
+              name="password"
+              icon={FiLock}
+            />
 
-          <Button type="submit">Cadatrar</Button>
-        </Form>
-        <a href="#id">
-          <FiArrowLeft />
-          Voltar para logon
-        </a>
+            <Button type="submit">Cadatrar</Button>
+          </Form>
+          <Link to="/">
+            <FiArrowLeft />
+            Voltar para logon
+          </Link>
+        </AnimationContainer>
       </Content>
     </Container>
   );

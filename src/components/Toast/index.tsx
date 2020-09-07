@@ -12,6 +12,7 @@ import { ToastMessage } from '../../hooks/modules/ToastContext';
 interface ToastProps {
   message: ToastMessage;
   removeToast(messageId: string): void;
+  style: object;
 }
 
 const icons = {
@@ -19,7 +20,7 @@ const icons = {
   error: <FiAlertCircle size={24} />,
   success: <FiCheckCircle size={24} />,
 };
-const Toast: React.FC<ToastProps> = ({ message, removeToast }) => {
+const Toast: React.FC<ToastProps> = ({ message, removeToast, style }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       removeToast(message.id);
@@ -31,6 +32,7 @@ const Toast: React.FC<ToastProps> = ({ message, removeToast }) => {
 
   return (
     <Container
+      style={style}
       key={message.id}
       hasDescription={!!message.description}
       type={message.type}

@@ -3,7 +3,8 @@ import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
-import { Container, Content, Background } from './styles';
+import { Link } from 'react-router-dom';
+import { Container, Content, Background, AnimationContainer } from './styles';
 import logoImg from '../../assets/Logo.svg';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -43,6 +44,8 @@ const SingnIn: React.FC = () => {
           const errors = getValidationErros(error);
 
           formRef.current?.setErrors(errors);
+
+          return;
         }
 
         addToast({
@@ -57,28 +60,29 @@ const SingnIn: React.FC = () => {
   return (
     <Container>
       <Content>
-        <img src={logoImg} alt="" />
+        <AnimationContainer>
+          <img src={logoImg} alt="" />
 
-        <Form ref={formRef} onSubmit={hanleSingnIn}>
-          <h1>Faça seu logon</h1>
+          <Form ref={formRef} onSubmit={hanleSingnIn}>
+            <h1>Faça seu logon</h1>
 
-          <Input placeholder="E-mail" icon={FiMail} name="email" />
-          <Input
-            placeholder="Senha"
-            type="password"
-            icon={FiLock}
-            name="password"
-          />
+            <Input placeholder="E-mail" icon={FiMail} name="email" />
+            <Input
+              placeholder="Senha"
+              type="password"
+              icon={FiLock}
+              name="password"
+            />
 
-          <Button type="submit">Entrar</Button>
-          <a href="#id">Esqueci minha senha</a>
-        </Form>
-        <a href="#id">
-          <FiLogIn />
-          Criar conta
-        </a>
+            <Button type="submit">Entrar</Button>
+            <a href="#id">Esqueci minha senha</a>
+          </Form>
+          <Link to="signup">
+            <FiLogIn />
+            Criar conta
+          </Link>
+        </AnimationContainer>
       </Content>
-
       <Background />
     </Container>
   );
