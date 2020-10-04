@@ -1,7 +1,11 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { shade } from 'polished';
 
-export const Container = styled.div`
+interface ContainerProps {
+  loading: number | undefined;
+}
+
+export const Container = styled.div<ContainerProps>`
   button {
     background: #ff9000;
     height: 56px;
@@ -17,4 +21,12 @@ export const Container = styled.div`
       background: ${shade(0.2, '#ff9000')};
     }
   }
+  ${props =>
+    props.loading &&
+    css`
+      button:disabled {
+        background: ${shade(0.6, '#ff9000')};
+        cursor: not-allowed;
+      }
+    `}
 `;
