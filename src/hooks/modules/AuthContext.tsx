@@ -7,11 +7,16 @@ interface SingnCredencials {
 }
 interface AuthState {
   token: string;
-  user: object;
+  user: User;
+}
+interface User {
+  id: string;
+  name: string;
+  avatar_url: string;
 }
 
 interface AuthContextData {
-  user: object;
+  user: User;
   signIn(crendencial: SingnCredencials): Promise<void>;
   signOut(): void;
 }
@@ -24,6 +29,7 @@ const AuthProvider: React.FC = ({ children }) => {
     const user = localStorage.getItem('@Gobarber:user');
 
     if (token && user) {
+      api.defaults.headers.authorization = `Bearer ${token}`;
       return { token, user: JSON.parse(user) };
     }
 
