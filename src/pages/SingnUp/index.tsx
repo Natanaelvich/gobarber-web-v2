@@ -61,8 +61,6 @@ const SingnUp: React.FC = () => {
           title: 'Erro ao cadastrar',
           description: 'Ocorreu um erro no cadastro, tente novamente.',
         });
-
-        console.log(error);
       }
     },
     [addToast, history],

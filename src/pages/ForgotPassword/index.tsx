@@ -62,8 +62,6 @@ const ForgotPassword: React.FC = () => {
           title: 'Erro ao enviar E-mail!',
           description: 'Verifique os dados e tente novamente.',
         });
-
-        console.log(error);
       } finally {
         setLoading(false);
       }
