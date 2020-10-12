@@ -159,7 +159,7 @@ const Profile: React.FC = () => {
             <img
               src={
                 user.avatar_url ||
-                `https://api.adorable.io/avatars/50/${user.name}@adorable.png`
+                `https://api.adorable.io/avatars/600/${user.name}@adorable.png`
               }
               alt={user.name}
             />
