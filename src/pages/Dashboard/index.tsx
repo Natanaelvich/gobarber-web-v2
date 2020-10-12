@@ -144,7 +144,7 @@ const Dashboard: React.FC = () => {
             <img
               src={
                 user.avatar_url ||
-                'https://api.adorable.io/avatars/50/abott@adorable.png'
+                `https://api.adorable.io/avatars/50/${user.name}@adorable.png`
               }
               alt={user.name}
             />
@@ -178,7 +178,7 @@ const Dashboard: React.FC = () => {
                 <img
                   src={
                     nextAppointment.user.avatar_url ||
-                    'https://api.adorable.io/avatars/50/abott@adorable.png'
+                    `https://api.adorable.io/avatars/50/${nextAppointment.user.name}@adorable.png`
                   }
                   alt={nextAppointment.user.name}
                 />
@@ -210,7 +210,7 @@ const Dashboard: React.FC = () => {
                   <img
                     src={
                       appointment.user.avatar_url ||
-                      'https://api.adorable.io/avatars/50/abott@adorable.png'
+                      `https://api.adorable.io/avatars/50/${appointment.user.name}@adorable.png`
                     }
                     alt={appointment.user.name}
                   />
@@ -239,7 +239,7 @@ const Dashboard: React.FC = () => {
                   <img
                     src={
                       appointment.user.avatar_url ||
-                      'https://api.adorable.io/avatars/50/abott@adorable.png'
+                      `https://api.adorable.io/avatars/50/${appointment.user.name}@adorable.png`
                     }
                     alt={appointment.user.name}
                   />
