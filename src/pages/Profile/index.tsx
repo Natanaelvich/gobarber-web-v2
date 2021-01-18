@@ -158,8 +158,7 @@ const Profile: React.FC = () => {
           <AvatarInput>
             <img
               src={
-                user.avatar_url ||
-                `https://api.adorable.io/avatars/600/${user.name}@adorable.png`
+                user.avatar_url || `https://www.gravatar.com/avatar/${user.id}`
               }
               alt={user.name}
             />

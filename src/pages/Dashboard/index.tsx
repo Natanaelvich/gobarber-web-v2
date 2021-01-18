@@ -143,8 +143,7 @@ const Dashboard: React.FC = () => {
           <Profile>
             <img
               src={
-                user.avatar_url ||
-                `https://api.adorable.io/avatars/50/${user.name}@adorable.png`
+                user.avatar_url || `https://www.gravatar.com/avatar/${user.id}`
               }
               alt={user.name}
             />
