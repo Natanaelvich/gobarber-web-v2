@@ -9,8 +9,8 @@ import logoImg from '../../assets/Logo.svg';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import getValidationErros from '../../utils/getValidationErros';
-import { useAuth } from '../../hooks/modules/AuthContext';
-import { useToast } from '../../hooks/modules/ToastContext';
+import { useAuth } from 'src/hooks/modules/AuthContext';
+import { useToast } from 'src/hooks/modules/ToastContext';
 
 const SingnIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
