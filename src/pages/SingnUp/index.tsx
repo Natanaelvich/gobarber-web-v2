@@ -85,7 +85,7 @@ const SingnUp: React.FC = () => {
               icon={FiLock}
             />
 
-            <Button type="submit">Cadatrar</Button>
+            <Button type="submit">Casdatrar</Button>
           </Form>
           <Link to="/">
             <FiArrowLeft />
