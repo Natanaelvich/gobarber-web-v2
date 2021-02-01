@@ -71,4 +71,6 @@ const Input: React.FC<InputProps> = ({
   );
 };
 
+Input.whyDidYouRender = true;
+
 export default Input;
