@@ -20,4 +20,6 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
+Button.whyDidYouRender = true;
+
 export default Button;
