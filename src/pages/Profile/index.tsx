@@ -123,14 +123,22 @@ const Profile: React.FC = () => {
 
         data.append('avatar', e.target.files[0]);
 
-        api.patch('/users/avatar', data).then(response => {
-          updateUser(response.data);
+        api
+          .patch('/users/avatar', data)
+          .then(response => {
+            updateUser(response.data);
 
-          addToast({
-            type: 'success',
-            title: 'Avatar atualizado!',
+            addToast({
+              type: 'success',
+              title: 'Avatar atualizado!',
+            });
+          })
+          .catch(err => {
+            addToast({
+              type: 'error',
+              title: 'Erro ao atualizar avatar!',
+            });
           });
-        });
       }
     },
     [addToast, updateUser],
