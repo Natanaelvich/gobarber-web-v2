@@ -127,7 +127,7 @@ describe('Profile Page', () => {
     });
   });
 
-  it('should be able to show toast on error', async () => {
+  it('should be able to show toast on error in the profile update', async () => {
     apiMock.onPut('/profile/update').reply(500);
 
     const { getByPlaceholderText, getByText } = render(<Profile />);
@@ -156,6 +156,58 @@ describe('Profile Page', () => {
     });
 
     fireEvent.click(buttonElement);
+
+    await wait(() => {
+      expect(mockedAddToast).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'error' }),
+      );
+    });
+  });
+
+  it('should be able to show toast on error', async () => {
+    const event = {
+      target: {
+        files: ['/not/sure/what/goes/in/here'],
+      },
+    };
+
+    const data = new FormData();
+
+    data.append('avatar', event.target.files[0]);
+
+    apiMock.onPatch('/users/avatar').reply(200, data);
+
+    mockedUpdateUser.mockImplementation(data => {
+      return data;
+    });
+
+    const { getByTestId } = render(<Profile />);
+
+    const fileInputField = getByTestId('avatar');
+
+    fireEvent.change(fileInputField, event);
+
+    await wait(() => {
+      expect(mockedUpdateUser).toHaveBeenCalled();
+      expect(mockedAddToast).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'error' }),
+      );
+    });
+  });
+
+  it('should be able to show toast on error update avatar', async () => {
+    apiMock.onPatch('/users/avatar').reply(500);
+    const event = {
+      target: {
+        files: [null],
+      },
+    };
+
+    const { getByTestId } = render(<Profile />);
+
+    const fileInputField = getByTestId('avatar');
+
+    fireEvent.change(fileInputField, event);
 
     await wait(() => {
       expect(mockedAddToast).toHaveBeenCalledWith(
