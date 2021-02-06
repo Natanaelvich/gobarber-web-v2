@@ -2,7 +2,54 @@ import React from 'react';
 import Dashboard from 'src/pages/Dashboard';
 import api from 'src/services/api';
 import MockAdapter from 'axios-mock-adapter';
-import { render, wait } from '@testing-library/react';
+import { fireEvent, render, wait } from '@testing-library/react';
+
+interface MonthAvailabilityItem {
+  day: number;
+  available: boolean;
+}
+
+let daysAvailables: MonthAvailabilityItem[] = [];
+
+for (let i = 0; i < 31; i++) {
+  if (i === 11) {
+    daysAvailables.push({
+      day: i,
+      available: true,
+    });
+  } else {
+    daysAvailables.push({
+      day: i,
+      available: false,
+    });
+  }
+}
+const apointmentsFake = [
+  {
+    id: 'id-appointment',
+    provider_id: 'provider_id',
+    user_id: 'user_id',
+    user: {
+      id: 'user_id',
+      name: 'john',
+      email: 'john@gmail.com',
+      avatar_url: null,
+    },
+    date: '2021-02-07T11:00:00.000Z',
+  },
+  {
+    id: 'id-appointment-1',
+    provider_id: 'provider_id-1',
+    user_id: 'user_id-1',
+    user: {
+      id: 'user_id-1',
+      name: 'john1',
+      email: 'john1@gmail.com',
+      avatar_url: null,
+    },
+    date: '2021-02-07T18:00:00.000Z',
+  },
+];
 
 const apiMock = new MockAdapter(api);
 const mockedHistoryPush = jest.fn();
@@ -39,7 +86,9 @@ jest.mock('../../hooks/modules/AuthContext.tsx', () => {
 describe('Dashboard Page', () => {
   it('should be able to look appointments dashboard', async () => {
     apiMock.onGet('/providers/appointments').reply(200, []);
-    apiMock.onGet('/providers/abc-123/month-availibity').reply(200, []);
+    apiMock
+      .onGet('/providers/abc-123/month-availibity')
+      .reply(200, daysAvailables);
 
     const { getByText } = render(<Dashboard />);
 
@@ -49,44 +98,9 @@ describe('Dashboard Page', () => {
   });
 
   it('should be able to look appointments list', async () => {
-    apiMock.onGet('/providers/appointments').reply(200, [
-      {
-        id: 'id-appointment',
-        provider_id: 'provider_id',
-        user_id: 'user_id',
-        user: {
-          id: 'user_id',
-          name: 'john',
-          email: 'john@gmail.com',
-          avatar: null,
-          created_at: '2021-02-07T03:28:52.000Z',
-          updated_at: '2021-02-07T03:28:52.000Z',
-          avatar_url: null,
-        },
-        date: '2021-02-07T11:00:00.000Z',
-        created_at: '2021-02-07T03:29:14.000Z',
-        updated_at: '2021-02-07T03:29:14.000Z',
-      },
-      {
-        id: 'id-appointment-1',
-        provider_id: 'provider_id-1',
-        user_id: 'user_id-1',
-        user: {
-          id: 'user_id-1',
-          name: 'john1',
-          email: 'john1@gmail.com',
-          avatar: null,
-          created_at: '2021-02-07T03:28:52.000Z',
-          updated_at: '2021-02-07T03:28:52.000Z',
-          avatar_url: null,
-        },
-        date: '2021-02-07T18:00:00.000Z',
-        created_at: '2021-02-07T03:29:14.000Z',
-        updated_at: '2021-02-07T03:29:14.000Z',
-      },
-    ]);
+    apiMock.onGet('/providers/appointments').reply(200, apointmentsFake);
 
-    const { getByTestId, getByText } = render(<Dashboard />);
+    const { getByTestId } = render(<Dashboard />);
 
     await wait(() => {
       expect(getByTestId('appointments-list-morning')).toBeTruthy();
@@ -94,28 +108,49 @@ describe('Dashboard Page', () => {
     });
   }, 10000);
 
-  // it('should dysplay an error  if login fails', async () => {
-  //   mockedSignIn.mockImplementation(() => {
-  //     throw new Error();
-  //   });
+  it('should be able to see the calendar', async () => {
+    const { container } = render(<Dashboard />);
 
-  //   const { getByPlaceholderText, getByText } = render(<SingnIn />);
+    await wait(() => {
+      const calendar = container.querySelector('.DayPicker');
 
-  //   const emailField = getByPlaceholderText('E-mail');
-  //   const passwordField = getByPlaceholderText('Senha');
-  //   const buttonElement = getByText('Entrar');
+      expect(calendar).toBeTruthy();
+    });
+  }, 10000);
 
-  //   fireEvent.change(emailField, {
-  //     target: { value: 'johndoe@example.com' },
-  //   });
-  //   fireEvent.change(passwordField, { target: { value: '123456' } });
+  it('should be able to change date and month at in calendar', async () => {
+    const { container, getByText } = render(<Dashboard />);
 
-  //   fireEvent.click(buttonElement);
+    await wait(() => {
+      const calendarDay = container.querySelector(
+        '[aria-label="Thu Feb 11 2021"]',
+      );
+      const calendarNextMonth = container.querySelector(
+        '[aria-label="Next Month"]',
+      );
+      if (calendarDay) {
+        fireEvent(
+          calendarDay,
+          new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+          }),
+        );
+      }
+      if (calendarNextMonth) {
+        fireEvent(
+          calendarNextMonth,
+          new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+          }),
+        );
+      }
 
-  //   await wait(() => {
-  //     expect(mockedAddToast).toHaveBeenCalledWith(
-  //       expect.objectContaining({ type: 'error' }),
-  //     );
-  //   });
-  // });
+      expect(getByText('Bem-vindo,')).toBeTruthy();
+      expect(getByText('Horários agendados')).toBeTruthy();
+      expect(getByText('Manhã')).toBeTruthy();
+      expect(getByText('Tarde')).toBeTruthy();
+    });
+  }, 10000);
 });
