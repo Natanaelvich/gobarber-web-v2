@@ -32,7 +32,7 @@ jest.mock('react-router-dom', () => {
   };
 });
 
-describe('ForgotPasswor Page', () => {
+describe('ForgotPassword Page', () => {
   beforeEach(() => {
     mockedHistoryPush.mockClear();
   });

@@ -35,7 +35,7 @@ jest.mock('../../hooks/modules/AuthContext.tsx', () => {
   };
 });
 
-describe('SignIn Page', () => {
+describe('Sign Up Page', () => {
   beforeEach(() => {
     mockedHistoryPush.mockClear();
   });
