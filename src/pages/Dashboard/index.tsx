@@ -200,7 +200,7 @@ const Dashboard: React.FC = () => {
 
             {morningAppointments.map(appointment => (
               <Appointment
-                data-testid="appointment-morning"
+                data-testid="appointments-list-morning"
                 key={appointment.id}
               >
                 <span>
@@ -231,7 +231,10 @@ const Dashboard: React.FC = () => {
             )}
 
             {afternoonAppointments.map(appointment => (
-              <Appointment key={appointment.id}>
+              <Appointment
+                data-testid="appointments-list-afternoon"
+                key={appointment.id}
+              >
                 <span>
                   <FiClock />
                   {appointment.hourFormatted}
