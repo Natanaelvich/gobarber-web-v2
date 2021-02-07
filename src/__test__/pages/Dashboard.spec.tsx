@@ -1,11 +1,12 @@
-import React, { useMemo } from 'react';
-import { fireEvent, render, wait } from '@testing-library/react';
+import React from 'react';
 import Dashboard from 'src/pages/Dashboard';
-import { renderHook } from '@testing-library/react-hooks';
+import api from 'src/services/api';
+import MockAdapter from 'axios-mock-adapter';
+import { render, wait } from '@testing-library/react';
 
+const apiMock = new MockAdapter(api);
 const mockedHistoryPush = jest.fn();
 const mockedAddToast = jest.fn();
-const useStateMock = jest.fn();
 
 jest.mock('../../hooks/modules/ToastContext.tsx', () => {
   return {
@@ -24,57 +25,74 @@ jest.mock('react-router-dom', () => {
   };
 });
 
-jest.mock('react', () => ({
-  // ...jest.requireActual('react'),
-  useState: useStateMock,
-}));
-
 jest.mock('../../hooks/modules/AuthContext.tsx', () => {
   return {
     useAuth: () => ({
-      user: {},
+      user: {
+        id: 'abc-123',
+      },
       signOut: jest.fn(),
     }),
   };
 });
 
 describe('Dashboard Page', () => {
-  beforeEach(() => {
-    mockedHistoryPush.mockClear();
+  it('should be able to look appointments dashboard', async () => {
+    apiMock.onGet('/providers/appointments').reply(200, []);
+    apiMock.onGet('/providers/abc-123/month-availibity').reply(200, []);
+
+    const { getByText } = render(<Dashboard />);
+
+    await wait(() => {
+      expect(getByText('Bem-vindo,')).toBeTruthy();
+    });
   });
 
-  const setAppointments = jest.fn();
+  it('should be able to look appointments list', async () => {
+    apiMock.onGet('/providers/appointments').reply(200, [
+      {
+        id: 'id-appointment',
+        provider_id: 'provider_id',
+        user_id: 'user_id',
+        user: {
+          id: 'user_id',
+          name: 'john',
+          email: 'john@gmail.com',
+          avatar: null,
+          created_at: '2021-02-07T03:28:52.000Z',
+          updated_at: '2021-02-07T03:28:52.000Z',
+          avatar_url: null,
+        },
+        date: '2021-02-07T11:00:00.000Z',
+        created_at: '2021-02-07T03:29:14.000Z',
+        updated_at: '2021-02-07T03:29:14.000Z',
+      },
+      {
+        id: 'id-appointment-1',
+        provider_id: 'provider_id-1',
+        user_id: 'user_id-1',
+        user: {
+          id: 'user_id-1',
+          name: 'john1',
+          email: 'john1@gmail.com',
+          avatar: null,
+          created_at: '2021-02-07T03:28:52.000Z',
+          updated_at: '2021-02-07T03:28:52.000Z',
+          avatar_url: null,
+        },
+        date: '2021-02-07T18:00:00.000Z',
+        created_at: '2021-02-07T03:29:14.000Z',
+        updated_at: '2021-02-07T03:29:14.000Z',
+      },
+    ]);
 
-  it('should be able to appointmens date', async () => {
-    const { getByText, getByTestId } = render(<Dashboard />);
-    useStateMock.mockImplementation(init => [init, setAppointments]);
+    const { getByTestId, getByText } = render(<Dashboard />);
 
-    // const wrapper = mount(<Dashboard />);
-    // expect(wrapper.find('Dropdown').to.have.length(2));
-
-    expect(getByText('Bem-vindo,')).toBeTruthy();
-    // expect(getByTestId('appointment-morning')).toBeTruthy();
-    expect(setAppointments).toHaveBeenCalledTimes(1);
-  });
-
-  // it('should not be able to sign in with invalid crendencials', async () => {
-  //   const { getByPlaceholderText, getByText } = render(<SingnIn />);
-
-  //   const emailField = getByPlaceholderText('E-mail');
-  //   const passwordField = getByPlaceholderText('Senha');
-  //   const buttonElement = getByText('Entrar');
-
-  //   fireEvent.change(emailField, {
-  //     target: { value: 'not-valid-email' },
-  //   });
-  //   fireEvent.change(passwordField, { target: { value: '123456' } });
-
-  //   fireEvent.click(buttonElement);
-
-  //   await wait(() => {
-  //     expect(mockedHistoryPush).not.toHaveBeenCalledWith('/dashboard');
-  //   });
-  // });
+    await wait(() => {
+      expect(getByTestId('appointments-list-morning')).toBeTruthy();
+      expect(getByTestId('appointments-list-afternoon')).toBeTruthy();
+    });
+  }, 10000);
 
   // it('should dysplay an error  if login fails', async () => {
   //   mockedSignIn.mockImplementation(() => {
