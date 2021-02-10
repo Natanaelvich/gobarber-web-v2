@@ -12,6 +12,7 @@ export interface ToastMessage {
 interface ToastContextData {
   addToast(message: Omit<ToastMessage, 'id'>): void;
   removeToast(messageId: string): void;
+  messages: ToastMessage[];
 }
 
 const ToastContext = createContext<ToastContextData>({} as ToastContextData);
@@ -40,7 +41,7 @@ const ToastProvider: React.FC = ({ children }) => {
   }, []);
 
   return (
-    <ToastContext.Provider value={{ addToast, removeToast }}>
+    <ToastContext.Provider value={{ addToast, removeToast, messages }}>
       {children}
       <ToastContainer messages={messages} />
     </ToastContext.Provider>
