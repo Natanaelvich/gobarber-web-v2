@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, wait } from '@testing-library/react';
+import { fireEvent, render, waitFor, screen } from '@testing-library/react';
 import SingnIn from '../../pages/SingnIn';
 
 const mockedHistoryPush = jest.fn();
@@ -43,6 +43,7 @@ describe('SignIn Page', () => {
     const passwordField = getByPlaceholderText('Senha');
     const buttonElement = getByText('Entrar');
 
+
     fireEvent.change(emailField, {
       target: { value: 'johndoe@example.com' },
     });
@@ -50,9 +51,12 @@ describe('SignIn Page', () => {
 
     fireEvent.click(buttonElement);
 
-    await wait(() => {
-      expect(mockedHistoryPush).toHaveBeenCalledWith('/dashboard');
-    });
+    await waitFor(() =>
+      expect(mockedHistoryPush).toHaveBeenCalledWith('/dashboard')
+    );
+
+    screen.logTestingPlaygroundURL()
+
   });
 
   it('should not be able to sign in with invalid crendencials', async () => {
@@ -69,9 +73,9 @@ describe('SignIn Page', () => {
 
     fireEvent.click(buttonElement);
 
-    await wait(() => {
-      expect(mockedHistoryPush).not.toHaveBeenCalledWith('/dashboard');
-    });
+    await waitFor(() =>
+      expect(mockedHistoryPush).not.toHaveBeenCalledWith('/dashboard')
+    );
   });
 
   it('should dysplay an error  if login fails', async () => {
@@ -92,10 +96,10 @@ describe('SignIn Page', () => {
 
     fireEvent.click(buttonElement);
 
-    await wait(() => {
+    await waitFor(() =>
       expect(mockedAddToast).toHaveBeenCalledWith(
         expect.objectContaining({ type: 'error' }),
-      );
-    });
+      )
+    );
   });
 });

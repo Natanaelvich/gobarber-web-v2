@@ -2,7 +2,7 @@ import React from 'react';
 import Dashboard from 'src/pages/Dashboard';
 import api from 'src/services/api';
 import MockAdapter from 'axios-mock-adapter';
-import { fireEvent, render, wait } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 interface MonthAvailabilityItem {
   day: number;
@@ -92,9 +92,11 @@ describe('Dashboard Page', () => {
 
     const { getByText } = render(<Dashboard />);
 
-    await wait(() => {
-      expect(getByText('Bem-vindo,')).toBeTruthy();
-    });
+    await waitFor(() =>
+      expect(getByText('Bem-vindo,')).toBeTruthy()
+    );
+
+    screen.logTestingPlaygroundURL()
   });
 
   it('should be able to look appointments list', async () => {
@@ -102,7 +104,7 @@ describe('Dashboard Page', () => {
 
     const { getByTestId } = render(<Dashboard />);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(getByTestId('appointments-list-morning')).toBeTruthy();
       expect(getByTestId('appointments-list-afternoon')).toBeTruthy();
     });
@@ -111,7 +113,7 @@ describe('Dashboard Page', () => {
   it('should be able to see the calendar', async () => {
     const { container } = render(<Dashboard />);
 
-    await wait(() => {
+    await waitFor(() =>{
       const calendar = container.querySelector('.DayPicker');
 
       expect(calendar).toBeTruthy();
@@ -121,7 +123,7 @@ describe('Dashboard Page', () => {
   it('should be able to change date and month at in calendar', async () => {
     const { container, getByText } = render(<Dashboard />);
 
-    await wait(() => {
+    await waitFor(() =>{
       const calendarDay = container.querySelector(
         '[aria-label="Thu Feb 11 2021"]',
       );
